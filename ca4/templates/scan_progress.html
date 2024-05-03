@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan in Progress</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function updateProgress(scan_id) {
+            $.getJSON('/status/' + scan_id, function(data) {
+                var status = data.status;
+                $('#progressStatus').text('Scan Progress: ' + status + '%');
+                if (status < 100) {
+                    setTimeout(function() { updateProgress(scan_id); }, 2000);
+                } else {
+                    window.location.href = '/results/' + scan_id;
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            updateProgress('{{ scan_id }}');
+        });
+    </script>
+</head>
+<body>
+    <h1>Scan in Progress</h1>
+    <div id="progressStatus">Scan Progress: 0%</div>
+</body>
+</html>
