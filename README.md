@@ -3,6 +3,7 @@ This tool scan the website(url) and find the vulnerabilities.
 
 # Technoligies Used
 **Zap(spider)** : To the scan the Url
+
 **Python** : Python for sending requests and reading content.
 
 # Installation & Usage
