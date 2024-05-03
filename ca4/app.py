@@ -51,10 +51,14 @@ def index():
         if is_supported_protocol(target_url):
             scan_id = zap.spider.scan(target_url)
             scans[scan_id] = {'url': target_url, 'status': 0}
-            return redirect(url_for('scan_status', scan_id=scan_id))
+            return redirect(url_for('scan_progress', scan_id=scan_id))
         else:
             return "Unsupported protocol", 400
     return render_template('index.html')
+
+@app.route('/scan_progress/<scan_id>')
+def scan_progress(scan_id):
+    return render_template('scan_progress.html', scan_id=scan_id)
 
 @app.route('/status/<scan_id>')
 def scan_status(scan_id):
@@ -67,7 +71,7 @@ def scan_status(scan_id):
 @app.route('/results/<scan_id>')
 def scan_results(scan_id):
     if scan_id in scans:
-        vulnerabilities = zap.core.alerts(scan_id=scan_id)
+        vulnerabilities = zap.core.alerts()
         if vulnerabilities:
             # Filter out unsupported protocols from vulnerabilities
             filtered_vulnerabilities = [vuln for vuln in vulnerabilities if is_supported_protocol(vuln['url'])]
