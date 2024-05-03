@@ -5,43 +5,19 @@
 </head>
 <body>
     <h1>Scan Results for {{ url }}</h1>
-    <div id="vulnerabilities"></div>
+    {% if alerts %}
+        <ul>
+            {% for alert in alerts %}
+                <li><strong>Alert:</strong> {{ alert.name }}</li>
+                <li><strong>Risk:</strong> {{ alert.risk }}</li>
+                <li><strong>URL:</strong> {{ alert.url }}</li>
+                <li><strong>Description:</strong> {{ alert.description }}</li>
+                <li>----------------</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No vulnerabilities found.</p>
+    {% endif %}
     <a href="/">Back to Home</a>
-
-    <script>
-        // Fetch the JSON data from the server
-        fetch('/results/{{ scan_id }}')
-            .then(response => response.json())
-            .then(data => {
-                const vulnerabilitiesDiv = document.getElementById('vulnerabilities');
-                // Check if there are any vulnerabilities
-                if (data.alerts && data.alerts.length > 0) {
-                    // Loop through each vulnerability and create HTML elements to display them
-                    data.alerts.forEach(alert => {
-                        const vulnerabilityDiv = document.createElement('div');
-                        vulnerabilityDiv.classList.add('vulnerability');
-                        const h2 = document.createElement('h2');
-                        h2.textContent = alert.alert;
-                        const riskParagraph = document.createElement('p');
-                        riskParagraph.innerHTML = `<strong>Risk:</strong> ${alert.risk}`;
-                        const urlParagraph = document.createElement('p');
-                        urlParagraph.innerHTML = `<strong>URL:</strong> ${alert.url}`;
-                        const descriptionParagraph = document.createElement('p');
-                        descriptionParagraph.innerHTML = `<strong>Description:</strong> ${alert.description}`;
-
-                        vulnerabilityDiv.appendChild(h2);
-                        vulnerabilityDiv.appendChild(riskParagraph);
-                        vulnerabilityDiv.appendChild(urlParagraph);
-                        vulnerabilityDiv.appendChild(descriptionParagraph);
-                        
-                        vulnerabilitiesDiv.appendChild(vulnerabilityDiv);
-                    });
-                } else {
-                    // If no vulnerabilities found, display a message
-                    vulnerabilitiesDiv.innerHTML = '<p>No vulnerabilities found.</p>';
-                }
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    </script>
 </body>
 </html>
