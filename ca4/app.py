@@ -16,7 +16,6 @@ def install_zap():
         os.makedirs(install_directory, exist_ok=True)
 
         # Install ZAP using the package manager
-        subprocess.run(["sudo", "apt-get", "update"])
         subprocess.run(["sudo", "apt-get", "install", "-y", "zaproxy"])
 
         print("ZAP installation completed.")
